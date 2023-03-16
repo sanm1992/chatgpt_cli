@@ -49,8 +49,7 @@ module ChatgptCli
     end
 
     def start_tag
-      line_index ||= 0
-      "chatgpt:#{line_index += 1}> "
+      "chatgpt:#{self.line_index += 1}> "
     end
 
     def get_instruction
@@ -106,7 +105,7 @@ module ChatgptCli
     def out(str)
       print start_tag
 
-      str.each_char do |c|
+      str.to_s.each_char do |c|
         print c
         $stdout.flush
         sleep 0.05

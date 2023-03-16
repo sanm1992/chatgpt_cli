@@ -21,8 +21,14 @@ Or install it yourself as:
     $ gem install chatgpt_cli
 
 ## Usage
+```
+export CHATGPT_OPENAI_KEY=XXX
+export CHATGPT_OPENAI_ORGANIZATION=XXX
+```
 
-TODO: Write usage instructions here
+```
+在终端执行 gptcli(需要自行架梯子)
+```
 
 ## Development
 
