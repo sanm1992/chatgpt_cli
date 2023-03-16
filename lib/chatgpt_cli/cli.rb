@@ -49,7 +49,8 @@ module ChatgptCli
     end
 
     def start_tag
-      "chatgpt:#{self.line_index += 1}> "
+      line_index ||= 0
+      "chatgpt:#{line_index += 1}> "
     end
 
     def get_instruction
