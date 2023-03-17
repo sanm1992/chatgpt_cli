@@ -22,7 +22,7 @@ module ChatgptCli
     private
 
     def show_by_default(content)
-      content.each_char do |c|
+      content&.each_char do |c|
         print c
         $stdout.flush
         sleep 0.05

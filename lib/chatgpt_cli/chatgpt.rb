@@ -9,8 +9,6 @@ module ChatgptCli
     CHATGPT_OPENAI_MODEL = 'gpt-3.5-turbo'
     CHATGPT_OPENAI_ROLE = 'user'
 
-    attr_accessor :openai_key, :openai_organization
-
     def fetch_dependences
       self.openai_key = ENV.fetch('CHATGPT_OPENAI_KEY', nil)
       self.openai_organization = ENV.fetch('CHATGPT_OPENAI_ORGANIZATION', nil)
@@ -25,8 +23,14 @@ module ChatgptCli
       params = { model: CHATGPT_OPENAI_MODEL, messages: [{ role: CHATGPT_OPENAI_ROLE, content: content }] }
       headers = { 'Authorization': "Bearer #{self.openai_key}", 'content-type': 'application/json', 'OpenAI-Organization': self.openai_organization }
       res = Net::HTTP.post(URI(CHATGPT_OPENAI_URL), params.to_json, headers)
-      res = JSON.parse res.body
-      res['choices']&.first&.[]('message')&.[]('content')
+      body = JSON.parse res.body
+      messages = body.dig('error', 'message') || body&.[]('choices')&.first&.dig('message', 'content')
+
+      [res.code.to_i.eql?(200), messages]
     end
+
+    private
+
+    attr_accessor :openai_key, :openai_organization
   end
 end

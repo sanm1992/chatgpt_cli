@@ -9,10 +9,9 @@ require_relative 'chatgpt_cli/show_tool'
 
 module ChatgptCli
   class Error < StandardError; end
-  # Your code goes here...
+
   class << self
     def exec
-      chatgpt_ai = ChatgptCli::Chatgpt.new
       cli = ChatgptCli::CLI.new
       cli.exec do |content|
         show_tool = ChatgptCli::ShowTool.new('default')
@@ -23,7 +22,8 @@ module ChatgptCli
         ai_ready, error = chatgpt_ai.fetch_dependences
         cli.quit!(error) unless ai_ready
 
-        show_tool.show chatgpt_ai.completion(content)
+        success, messages = chatgpt_ai.completion(content)
+        success ? show_tool.show(messages) : cli.error(messages)
       end
     end
   end

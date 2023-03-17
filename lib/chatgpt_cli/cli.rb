@@ -23,6 +23,8 @@ module ChatgptCli
 
       welcome
 
+      Signal.trap('INT') { quit! }
+
       loop do
         get_instruction
 
@@ -34,6 +36,10 @@ module ChatgptCli
       out(message.to_s.red) unless message.nil? || message.empty?
 
       exit(1)
+    end
+
+    def error(message = nil)
+      out(message.to_s.red)
     end
 
     private
@@ -80,9 +86,11 @@ module ChatgptCli
         return true
       end
 
-      out "正在为你查找 #{search_content.join('')} 的答案"
       begin
+        out 'ChatGPT >>>>>>>'.magenta
+
         collback&.call(search_content.join(''))
+
         puts "\n"
       rescue => ex
         out ex.message
@@ -113,5 +121,15 @@ module ChatgptCli
 
       puts "\n"
     end
+
+    # def loading
+    #   chars = %w[| / - \\]
+    #   i = 0
+    #   while i>=0 do
+    #     print "#{chars[i % 4]} loading.. "
+    #     i += 1
+    #     sleep(0.1)
+    #   end
+    # end
   end
 end
